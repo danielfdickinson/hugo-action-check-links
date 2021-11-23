@@ -6,12 +6,6 @@ on:
       - opened
       - synchronize
       - reopened
-    paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-      - '.gitignore'
-      - '.vscode'
-      - 'scripts'
   push:
     branches:
       - main
