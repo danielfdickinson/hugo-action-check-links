@@ -24,7 +24,6 @@ jobs:
         uses: danielfdickinson/hugo-action-build-audit@main
         with:
           source-directory: src
-          upload-html-validate-config: true
           upload-npm-json: true
           upload-site-as: unminified-site
           use-lfs: false
