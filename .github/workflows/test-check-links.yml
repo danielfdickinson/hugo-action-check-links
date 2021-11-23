@@ -24,7 +24,6 @@ jobs:
         uses: danielfdickinson/hugo-action-build-audit@main
         with:
           source-directory: src
-          upload-html-validate-config: true
           upload-npm-json: true
           upload-site-as: unminified-site
           use-lfs: false
@@ -35,3 +34,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
         uses: ./
+        with:
+          canonical-root: https://www.example.com/
