@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "html-validate": "^6.1.3",
+    "hyperlink": "^5.0.0",
+    "tap-spot": "^1.1.1"
+  }
+}

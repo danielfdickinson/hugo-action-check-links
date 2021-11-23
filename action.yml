@@ -1,0 +1,54 @@
+name: "Hugo Check Links"
+description: "Check links on a Hugo site"
+inputs:
+  canonical-root:
+    description: "Canonical root of site (e.g. baseURL)"
+    required: true
+  check-external:
+    description: "Check external links as well as internal"
+    required: false
+  download-site-as:
+    description: "Artifact containing the Hugo site"
+    required: true
+    default: unminified-site
+  output-directory:
+    description: "Location of output site"
+    required: true
+    default: "public"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: ${{ inputs.download-site-as }}
+    - name: "Extract site and configs"
+      shell: bash
+      run: tar -xf hugo-site.tar
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        cache: 'npm'
+    - run: npm install
+      shell: bash
+    - name: "Check internal links"
+      shell: bash
+      env:
+        CANONICAL_ROOT: ${{ inputs.canonical-root }}
+        CHECK_EXTERNAL: ${{ inputs.check-external }}
+        OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
+      run: |
+        set -o pipefail; \
+        if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
+        npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
+        --canonicalroot ${CANONICAL_ROOT} \
+        ${INTERNAL} \
+        --skip "https://www.facebook.com/sharer.php" \
+        --skip "https://linkedin.com/shareArticle" \
+        --skip "https://twitter.com/share" \
+        --skip "https://www.pexels.com" \
+        --skip "https://pixabay.com" \
+        --skip "example.com" \
+        --skip "example.net" \
+        --todo "301 http" \
+        --todo "fragment-redirect" \
+        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml

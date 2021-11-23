@@ -1,0 +1,37 @@
+name: test-check-links
+on:
+  pull_request:
+    types:
+      - assigned
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+      - staging-**
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.vscode'
+      - 'scripts'
+jobs:
+  build-unminified-site:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Build Site with Hugo and Audit"
+        uses: danielfdickinson/hugo-action-build-audit@main
+        with:
+          source-directory: src
+          upload-html-validate-config: true
+          upload-npm-json: true
+          upload-site-as: unminified-site
+          use-lfs: false
+  check-links:
+    needs: build-unminified-site
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run hugo-action-check-links
+        uses: ./
