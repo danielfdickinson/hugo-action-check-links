@@ -31,8 +31,8 @@ This is a meant to be a pass/fail test which blocks pushing broken internal link
 The tarball in the artifact pointed to by ``download-site-as`` must be named ``hugo-site.tar`` and contain the following:
 
 * A subdirectory tree containing the site (default: _public_, optionally defined by ``output-directory``).
-* ``package.json``
-* (recommended) ``package-lock.json``
+
+Needed configuration must exist in the workspace. The best way to do this is to do a shallow checkout of the repo.
 
 ``package.json`` and ``package-lock.json`` are used by ``npm install`` to install ``hyperlink`` which does the link-checking.
 
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: "Build Site with Hugo and Audit"
-        uses: danielfdickinson/hugo-action-build-audit@main
+        uses: danielfdickinson/hugo-action-build-audit@v0.1.0
         with:
           source-directory: src
           upload-npm-json: true

@@ -22,10 +22,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: "Build Site with Hugo and Audit"
-        uses: danielfdickinson/hugo-action-build-audit@main
+        uses: danielfdickinson/hugo-action-build-audit@v0.1.0
         with:
           source-directory: src
-          upload-npm-json: true
           upload-site-as: unminified-site
           use-lfs: false
   check-links:
