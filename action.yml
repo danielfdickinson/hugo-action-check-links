@@ -1,5 +1,9 @@
 name: "Hugo Check Links"
+author: "Daniel F. Dickinson"
 description: "Check links on a Hugo site"
+branding:
+  color: blue
+  icon: link
 inputs:
   canonical-root:
     description: "Canonical root of site (e.g. baseURL)"
