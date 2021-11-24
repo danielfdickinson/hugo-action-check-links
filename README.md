@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: "Build Site with Hugo and Audit"
-        uses: danielfdickinson/hugo-action-build-audit@v0.1.0
+        uses: danielfdickinson/hugo-action-build-audit@v0.1.1
         with:
           source-directory: src
           upload-npm-json: true
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links
+        uses: danielfdickinson/hugo-action-check-links@v0.1.1
         with:
           canonical-root: https://www.example.com/
 ```
