@@ -1,8 +1,8 @@
 name: weekly-external-link-check
 on:
   schedule:
-    # At 3:05 AM -0500 on Thursday, check all external links
-    - cron: '12 8 * * 4'
+    # At 5:20 AM -0500 on Thursday, check all external links
+    - cron: '20 10 * * 4'
 jobs:
   build-unminified-site:
     runs-on: ubuntu-20.04
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.1
+        uses: ./
         with:
           canonical-root: https://www.example.com/
           check-external: true
