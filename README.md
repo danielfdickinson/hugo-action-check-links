@@ -96,7 +96,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.1
+        uses: danielfdickinson/hugo-action-check-links@v0.1.2
         with:
           canonical-root: https://www.example.com/
 ```
@@ -125,7 +125,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.1
+        uses: danielfdickinson/hugo-action-check-links@v0.1.2
         with:
           canonical-root: https://www.example.com/
           check-external: true
@@ -155,8 +155,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.1
+        uses: danielfdickinson/hugo-action-check-links@v0.1.2
         with:
           canonical-root: https://www.example.com/
           check-external: true
+          check-external-strict: true
+          upload-logs-as: logs-failed-monthly-strict-external-link-check
 ```
