@@ -15,11 +15,23 @@ inputs:
     description: "Artifact containing the Hugo site"
     required: true
     default: unminified-site
+  download-site-filename:
+    description: "Filename for tarball of site to download to artifact"
+    required: true
+    default: hugo-site.tar
   output-directory:
     description: "Location of output site"
     required: true
     default: "public"
+  upload-logs-as:
+    description: "Upload logs as an artifact"
+    required: false
+    default: "false"
+  upload-logs-retention:
+    description: "Retention period for logs uploaded as an artifact"
+    required: false
 runs:
+  # TODO: Convert to JavaScript Runner
   using: "composite"
   steps:
     - uses: actions/download-artifact@v2
@@ -32,7 +44,7 @@ runs:
       with:
         node-version: '16'
         cache: 'npm'
-    - run: npm install
+    - run: if test -e package.json -o -e package-lock.json; then npm install; fi
       shell: bash
     - name: "Check internal links"
       shell: bash
@@ -41,6 +53,13 @@ runs:
         CHECK_EXTERNAL: ${{ inputs.check-external }}
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
       run: |
+        rm -f ok.log; \
+        rm -f todo.log; \
+        rm -f errors.log; \
+        mkfifo ok-links; \
+        mkfifo todo-links; \
+        ( cat ok-links | (echo "::group::ok links"; grep "^ ok " | tee ok.log; echo "::endgroup::ok links") & ); \
+        ( cat todo-links | grep '# *TODO' >todo.log & ); \
         set -o pipefail; \
         if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
@@ -55,4 +74,16 @@ runs:
         --skip "example.net" \
         --todo "301 http" \
         --todo "fragment-redirect" \
-        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml
+        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee ok-links | tee todo-links | grep -v "^ *ok " | tee error.log ; \
+        if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi
+    - name: Upload logs
+      if: inputs.upload-logs-as
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ inputs.upload-logs-as }}
+        path: |
+          ok.log
+          todo.log
+          error.log
+        if-no-files-found: error
+        retention-days: ${{ inputs.upload-logs-retention }}

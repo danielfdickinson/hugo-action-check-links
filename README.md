@@ -26,17 +26,24 @@ This is a meant to be a pass/fail test which blocks pushing broken internal link
 | canonical-root | yes | _(nil)_ (will fail build unless specified in ``with``) | URLs beginning with this string are considered internal, in addition to site-relative URLs (e.g. beginning with slash ``/``) or page-relative URLs) |
 | check-external | no | n/a | If "true" check all URLs including offsite (external) |
 | download-site-as | yes | unminified-site | Name of artifact from build stage which contains the site (tarball, no compression) |
+| download-site-filename | yes | hugo-site.tar | Name of tarball in artifact from build stage which contains the site (no compression) |
 | output-directory | yes | public | Directory (in the artifact, above, containing the site) |
+| upload-logs-as | no | _(nil)_ | If present will upload logs of link check results (ok.log, todo.log, error.log) as an artifact with this name |
+| upload-logs-retention | no | _(nil)_ | How many days to retain logs uploaded as an artifact. If not set uses the GitHub default (90 days). |
 
-The tarball in the artifact pointed to by ``download-site-as`` must be named ``hugo-site.tar`` and contain the following:
+The tarball in the artifact pointed to by ``download-site-as`` and has the name defined by ``download-site-filename`` (default: ``hugo-site.tar``) and contain the following:
 
 * A subdirectory tree containing the site (default: _public_, optionally defined by ``output-directory``).
 
-Needed configuration must exist in the workspace. The best way to do this is to do a shallow checkout of the repo.
+## Dependencies
 
 ``package.json`` and ``package-lock.json`` are used by ``npm install`` to install ``hyperlink`` which does the link-checking.
 
 ``hyperlink`` is <https://www.npmjs.com/package/hyperlink/> with homepage <https://github.com/Munter/hyperlink>.
+
+Needed configuration should exist in the workspace. The best way to do this is to do a shallow checkout of the repo.
+
+If no NPM config exists, use of ``npx`` means that the latest version of ``hyperlink`` will be installed, even without a ``package.json`` or ``package-lock.json``. Using them allows you to control the version of ``hyperlink`` that is used.
 
 ### Outputs
 
@@ -72,7 +79,6 @@ jobs:
         uses: danielfdickinson/hugo-action-build-audit@v0.1.1
         with:
           source-directory: src
-          upload-npm-json: true
           upload-site-as: unminified-site
           use-lfs: false
   check-links:
