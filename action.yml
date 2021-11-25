@@ -29,7 +29,6 @@ inputs:
   upload-logs-as:
     description: "Upload logs as an artifact"
     required: false
-    default: "false"
   upload-logs-retention:
     description: "Retention period for logs uploaded as an artifact"
     required: false
