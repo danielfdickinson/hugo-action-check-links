@@ -93,7 +93,7 @@ runs:
         echo "::group::todo links"; cat todo.log; echo "::endgroup::todo links"; \
         echo "::group::ok links"; cat ok.log; echo "::endgroup::ok links"; \
     - name: Upload logs
-      if: (failure() && inputs.upload-logs-as) || inputs.upload-logs-as
+      if: failure() && inputs.upload-logs-as
       uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.upload-logs-as }}

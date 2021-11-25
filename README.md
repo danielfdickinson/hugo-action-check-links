@@ -25,10 +25,11 @@ This is a meant to be a pass/fail test which blocks pushing broken internal link
 |-------|-------|---------|---------|
 | canonical-root | yes | _(nil)_ (will fail build unless specified in ``with``) | URLs beginning with this string are considered internal, in addition to site-relative URLs (e.g. beginning with slash ``/``) or page-relative URLs) |
 | check-external | no | n/a | If "true" check all URLs including offsite (external) |
+| check-external-strict | no | n/a | If "true" 301 redirects (only occurs with external checks) result in a fail instead on only warning |
 | download-site-as | yes | unminified-site | Name of artifact from build stage which contains the site (tarball, no compression) |
 | download-site-filename | yes | hugo-site.tar | Name of tarball in artifact from build stage which contains the site (no compression) |
 | output-directory | yes | public | Directory (in the artifact, above, containing the site) |
-| upload-logs-as | no | _(nil)_ | If present will upload logs of link check results (ok.log, todo.log, error.log) as an artifact with this name |
+| upload-logs-as | no | _(nil)_ | If present will, on failed links, upload logs of link check results (ok.log, todo.log, error.log) as an artifact with this name |
 | upload-logs-retention | no | _(nil)_ | How many days to retain logs uploaded as an artifact. If not set uses the GitHub default (90 days). |
 
 The tarball in the artifact pointed to by ``download-site-as`` and has the name defined by ``download-site-filename`` (default: ``hugo-site.tar``) and contain the following:
@@ -50,6 +51,8 @@ If no NPM config exists, use of ``npx`` means that the latest version of ``hyper
 None
 
 ### Sample usage
+
+#### Usual CI (on pull_request or push)
 
 ```yaml
 name: test-check-links
@@ -90,4 +93,34 @@ jobs:
         uses: danielfdickinson/hugo-action-check-links@v0.1.1
         with:
           canonical-root: https://www.example.com/
+```
+
+#### Scheduled external (all) links check
+
+```yaml
+name: weekly-external-link-check
+on:
+  schedule:
+    # At 10:45 PM -0500 check all external links
+    - cron: '45 3 * * 3'
+jobs:
+  build-unminified-site:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Build Site with Hugo and Audit"
+        uses: danielfdickinson/hugo-action-build-audit@v0.1.1
+        with:
+          source-directory: src
+          upload-site-as: unminified-site
+          use-lfs: false
+  check-external-links:
+    needs: build-unminified-site
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run hugo-action-check-links
+        uses: danielfdickinson/hugo-action-check-links@v0.1.1
+        with:
+          canonical-root: https://www.example.com/
+          check-external: true
 ```
