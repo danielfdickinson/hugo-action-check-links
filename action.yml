@@ -68,7 +68,8 @@ runs:
         mkfifo full-output; \
         { cat full-output >full.log & }; \
         { cat ok-links | grep '^ *ok ' >ok.log & }; \
-        { cat todo-links | grep '# *TODO' >todo.log & }; \
+        { cat todo-links | sed -e '/# *TODO/,/^  \.\.\./p
+        d' >todo.log & }; \
         set -o pipefail; \
         if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
         if test "${CHECK_EXTERNAL_STRICT}" = "true"; then TODOS= ; else TODOS="true"; fi ; \
@@ -89,6 +90,7 @@ runs:
         sleep 1; \
         sync; \
         if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi
+        echo "::group::todo links"; cat todo.log; echo "::endgroup::todo links"; \
         echo "::group::ok links"; cat ok.log; echo "::endgroup::ok links"; \
     - name: Upload logs
       if: (failure() && inputs.upload-logs-as) || inputs.upload-logs-as
