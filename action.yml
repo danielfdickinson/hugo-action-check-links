@@ -76,7 +76,7 @@ runs:
         --skip "example.net" \
         --todo "301 http" \
         --todo "fragment-redirect" \
-        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version)" | tee error.log ; \
+        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" | tee error.log ; \
         sleep 1; \
         sync; \
         if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi

@@ -36,6 +36,7 @@ jobs:
         uses: ./
         with:
           canonical-root: https://www.example.com/
+          check-external: "true"
           upload-logs-as: test-logs
           upload-logs-retention: 1
 
