@@ -59,9 +59,9 @@ runs:
         mkfifo ok-links; \
         mkfifo todo-links; \
         mkfifo full-output; \
-        ( cat full-output >full.log & ); \
-        ( cat ok-links | (echo "::group::ok links"; grep "^ ok " | tee ok.log; echo "::endgroup::ok links") & ); \
-        ( cat todo-links | grep '# *TODO' >todo.log & ); \
+        cat full-output >full.log & ; \
+        cat ok-links > ok.log & ; \
+        cat todo-links | grep '# *TODO' >todo.log & ; \
         set -o pipefail; \
         if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
@@ -76,10 +76,11 @@ runs:
         --skip "example.net" \
         --todo "301 http" \
         --todo "fragment-redirect" \
-        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version)" | tee error.log ; \
+        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version)" | tee error.log ; \
         sleep 1; \
         sync; \
         if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi
+        echo "::group::ok links"; cat ok.log; echo "::endgroup::ok links"; \
     - name: Upload logs
       if: inputs.upload-logs-as
       uses: actions/upload-artifact@v2

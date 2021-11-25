@@ -37,5 +37,5 @@ jobs:
         with:
           canonical-root: https://www.example.com/
           upload-logs-as: test-logs
-          upload-log-retention: 1
+          upload-logs-retention: 1
 
