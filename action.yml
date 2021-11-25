@@ -68,7 +68,7 @@ runs:
         { cat todo-links | grep '# *TODO' >todo.log & }; \
         set -o pipefail; \
         if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
-        if test "${CHECK_EXTERNAL_STRICT}" = "true"; then TODOS= ; else TODOS="--todo '301 http' --todo 'fragment-redirect'"; fi ; \
+        if test "${CHECK_EXTERNAL_STRICT}" = "true"; then TODOS= ; else TODOS="true"; fi ; \
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
         --canonicalroot ${CANONICAL_ROOT} \
         ${INTERNAL} \
@@ -79,7 +79,7 @@ runs:
         --skip "https://pixabay.com" \
         --skip "example.com" \
         --skip "example.net" \
-        ${TODOS} \
+        ${TODOS:---todo "301 http" --todo "fragment-redirect"} \
         -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" | tee error.log ; \
         sleep 1; \
         sync; \
