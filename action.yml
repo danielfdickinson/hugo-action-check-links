@@ -79,7 +79,7 @@ runs:
         --skip "https://pixabay.com" \
         --skip "example.com" \
         --skip "example.net" \
-        ${TODOS:---todo "301 http" --todo "fragment-redirect"} \
+        ${TODOS:+--todo "301 http" --todo "fragment-redirect"} \
         -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" | tee error.log ; \
         sleep 1; \
         sync; \
