@@ -58,6 +58,8 @@ runs:
         rm -f errors.log; \
         mkfifo ok-links; \
         mkfifo todo-links; \
+        mkfifo full-output; \
+        ( cat full-output >full.log & ); \
         ( cat ok-links | (echo "::group::ok links"; grep "^ ok " | tee ok.log; echo "::endgroup::ok links") & ); \
         ( cat todo-links | grep '# *TODO' >todo.log & ); \
         set -o pipefail; \
@@ -74,7 +76,9 @@ runs:
         --skip "example.net" \
         --todo "301 http" \
         --todo "fragment-redirect" \
-        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee ok-links | tee todo-links | grep -v "^ *ok " | tee error.log ; \
+        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version)" | tee error.log ; \
+        sleep 1; \
+        sync; \
         if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi
     - name: Upload logs
       if: inputs.upload-logs-as
@@ -85,5 +89,6 @@ runs:
           ok.log
           todo.log
           error.log
+          full.log
         if-no-files-found: error
         retention-days: ${{ inputs.upload-logs-retention }}
