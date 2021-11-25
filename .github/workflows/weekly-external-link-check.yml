@@ -1,8 +1,8 @@
 name: weekly-external-link-check
 on:
   schedule:
-    # At 2:48 AM -0500 on Thursday, check all external links
-    - cron: '48 7 * * 4'
+    # At 3:05 AM -0500 on Thursday, check all external links
+    - cron: '05 8 * * 4'
 jobs:
   build-unminified-site:
     runs-on: ubuntu-20.04
