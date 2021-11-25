@@ -124,3 +124,33 @@ jobs:
           canonical-root: https://www.example.com/
           check-external: true
 ```
+
+#### Scheduled strict external (all) links check
+
+```yaml
+name: monthly-strict-external-link-check
+on:
+  schedule:
+    # At 10:45 PM -0500 on the 12th day of the month strictly check all external links (no 'todo' for 301 permanent redirect; fail it)
+    - cron: '25 4 12 * *'
+jobs:
+  build-unminified-site:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: "Build Site with Hugo and Audit"
+        uses: danielfdickinson/hugo-action-build-audit@v0.1.1
+        with:
+          source-directory: src
+          upload-site-as: unminified-site
+          use-lfs: false
+  check-external-links:
+    needs: build-unminified-site
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run hugo-action-check-links
+        uses: danielfdickinson/hugo-action-check-links@v0.1.1
+        with:
+          canonical-root: https://www.example.com/
+          check-external: true
+```
