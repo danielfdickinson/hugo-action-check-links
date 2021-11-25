@@ -1,8 +1,8 @@
 name: monthly-external-link-check
 on:
   schedule:
-    # At 3:20 AM -0500 on the 25th day of month strictly check all external links (301 Moved is a failure not just a warning)
-    - cron: '20 8 25 * *'
+    # At 5:25 AM -0500 on the 25th day of month strictly check all external links (301 Moved is a failure not just a warning)
+    - cron: '25 10 25 * *'
 jobs:
   build-unminified-site:
     runs-on: ubuntu-20.04
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.1
+        uses: ./
         with:
           canonical-root: https://www.example.com/
           check-external: true
