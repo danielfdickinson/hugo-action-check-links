@@ -3,13 +3,19 @@ GitHub Action to check links (internal-only or optionally all links) for a Hugo 
 
 ## Status
 
-### Main
+### Main & Pull Requests
 
-![test-build-validate](https://github.com/danielfdickinson/hugo-action-check-links/actions/workflows/test-check-links.yml/badge.svg)
+![test-build-validate](https://github.com/danielfdickinson/hugo-action-check-links/actions/workflows/test-check-links.yml/badge.svg) ![test-build-validate PR](https://github.com/danielfdickinson/hugo-action-check-links/actions/workflows/test-check-links.yml/badge.svg?on=pull_request)
 
-### Pull Request
 
-![test-build-validate PR](https://github.com/danielfdickinson/hugo-action-check-links/actions/workflows/test-check-links.yml/badge.svg?event=pull_request)
+### Scheduled
+
+![weekly external link check](https://github.com/danielfdickinson/hugo-action-check-links/actions/workflows/weekly-external-link-check.yml/badge.svg?on=schedule)
+
+#### Intentional Failure (for this repo only)
+
+ ![monthly external link check](https://github.com/danielfdickinson/hugo-action-check-links/actions/workflows/monthly-external-link-check.yml/badge.svg?on=schedule)
+
 
 ## Details
 
