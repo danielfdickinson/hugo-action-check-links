@@ -69,6 +69,7 @@ runs:
         set -o pipefail; \
         if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
         if test "${CHECK_EXTERNAL_STRICT}" = "true"; then TODOS= ; else TODOS="true"; fi ; \
+        echo "::group::not ok links"
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
         --canonicalroot ${CANONICAL_ROOT} \
         ${INTERNAL} \
@@ -81,6 +82,7 @@ runs:
         --skip "example.net" \
         ${TODOS:+--todo "301 http" --todo "fragment-redirect"} \
         -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" | tee error.log ; \
+        echo "::endgroup::not ok links"
         sleep 1; \
         sync; \
         if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi
