@@ -2,7 +2,7 @@ name: monthly-external-link-check
 on:
   schedule:
     # At 5:25 AM -0500 on the 25th day of month strictly check all external links (301 Moved is a failure not just a warning)
-    - cron: '25 10 25 * *'
+    - cron: '40 10 25 * *'
 jobs:
   build-unminified-site:
     runs-on: ubuntu-20.04
