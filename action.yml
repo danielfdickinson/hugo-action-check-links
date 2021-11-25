@@ -47,7 +47,10 @@ runs:
       with:
         node-version: '16'
         cache: 'npm'
-    - run: if test -e package.json -o -e package-lock.json; then npm install; fi
+    - run: |
+        echo "::group::npm install output"; \
+        if test -e package.json -o -e package-lock.json; then npm install; fi; \
+        echo "::endgroup::npm install output"; \
       shell: bash
     - name: "Check internal links"
       shell: bash
