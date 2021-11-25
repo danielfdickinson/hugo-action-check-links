@@ -11,6 +11,9 @@ inputs:
   check-external:
     description: "Check external links as well as internal"
     required: false
+  check-external-strict:
+    description: "Fail on 301 redirect instead of just warning"
+    required: false
   download-site-as:
     description: "Artifact containing the Hugo site"
     required: true
@@ -82,7 +85,7 @@ runs:
         if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi
         echo "::group::ok links"; cat ok.log; echo "::endgroup::ok links"; \
     - name: Upload logs
-      if: inputs.upload-logs-as
+      if: (failure() && inputs.upload-logs-as) || inputs.upload-logs-as
       uses: actions/upload-artifact@v2
       with:
         name: ${{ inputs.upload-logs-as }}
