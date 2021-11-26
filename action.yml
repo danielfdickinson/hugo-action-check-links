@@ -84,7 +84,7 @@ runs:
         --skip "example.com" \
         --skip "example.net" \
         ${TODOS:+--todo "301 http" --todo "fragment-redirect"} \
-        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" | tee error.log ; \
+        -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | { grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" || true; } | tee error.log ; \
         echo "::endgroup::not ok links"; \
         sleep 1; \
         sync; \
