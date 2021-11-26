@@ -96,7 +96,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.3
+        uses: danielfdickinson/hugo-action-check-links@v0.1.4
         with:
           canonical-root: https://www.example.com/
 ```
@@ -125,7 +125,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.3
+        uses: danielfdickinson/hugo-action-check-links@v0.1.4
         with:
           canonical-root: https://www.example.com/
           check-external: true
@@ -155,7 +155,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run hugo-action-check-links
-        uses: danielfdickinson/hugo-action-check-links@v0.1.3
+        uses: danielfdickinson/hugo-action-check-links@v0.1.4
         with:
           canonical-root: https://www.example.com/
           check-external: true
