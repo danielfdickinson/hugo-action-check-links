@@ -33,7 +33,7 @@ inputs:
     description: "Retention period for logs uploaded as an artifact"
     required: false
 runs:
-  # TODO: Convert to JavaScript Runner
+  # TODO: #18 Convert to JavaScript Runner
   using: "composite"
   steps:
     - uses: actions/download-artifact@v2
@@ -88,7 +88,7 @@ runs:
         echo "::endgroup::not ok links"
         sleep 1; \
         sync; \
-        if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi
+        if test -s todo.log; then echo '::warning:: Permanent redirects exist for some links; this is not fatal but links should be updated to the new location'; fi; \
         echo "::group::todo links"; cat todo.log; echo "::endgroup::todo links"; \
         echo "::group::ok links"; cat ok.log; echo "::endgroup::ok links"; \
     - name: Upload logs
