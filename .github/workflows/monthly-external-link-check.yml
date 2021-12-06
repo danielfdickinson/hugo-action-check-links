@@ -24,3 +24,5 @@ jobs:
           canonical-root: https://www.example.com/
           check-external: true
           check-external-strict: true
+          upload-logs-as: test-logs
+          upload-logs-retention: 1
