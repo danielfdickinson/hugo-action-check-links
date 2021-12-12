@@ -76,11 +76,15 @@ runs:
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
         --canonicalroot ${CANONICAL_ROOT} \
         ${INTERNAL} \
-        --skip "https://www.facebook.com/sharer.php" \
+        --skip "https://www.linkedin.com/shareArticle" \
         --skip "https://linkedin.com/shareArticle" \
         --skip "https://twitter.com/share" \
         --skip "https://www.pexels.com" \
         --skip "https://pixabay.com" \
+        --skip "http://doi.org/" \
+        --skip "https://doi.org/" \
+        --skip "https://www.nature.com/" \
+        --skip "https://arxiv.org/" \
         --skip "example.com" \
         --skip "example.net" \
         ${TODOS:+--todo "301 http" --todo "fragment-redirect"} \
