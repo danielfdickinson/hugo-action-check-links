@@ -78,10 +78,11 @@ runs:
         if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
         if test "${CHECK_EXTERNAL_STRICT}" = "true"; then TODOS= ; else TODOS="true"; fi ; \
         echo "::group::not ok links"; \
+        echo "${SKIP_CHECK_PATTERNS}" \
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
         --canonicalroot ${CANONICAL_ROOT} \
         ${INTERNAL} \
-        --skip \"${SKIP_CHECK_PATTERNS}\" \
+        --skip "${SKIP_CHECK_PATTERNS}" \
         ${TODOS:+--todo "301 http" --todo "fragment-redirect"} \
         -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | { grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" || true; } | tee error.log ; \
         echo "::endgroup::not ok links"; \
