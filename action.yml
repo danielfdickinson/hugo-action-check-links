@@ -62,7 +62,7 @@ runs:
         CHECK_EXTERNAL: ${{ inputs.check-external }}
         CHECK_EXTERNAL_STRICT: ${{ inputs.check-external-strict }}
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
-        SKIP_CHECK_PATTERNS: ${{ join(inputs.skip-check-patterns, '" --skip "') }}
+        SKIP_CHECK_PATTERNS: ${{ inputs.skip-check-patterns }}
       run: |
         { rm -f ok.log; \
         rm -f todo.log; \
@@ -78,11 +78,12 @@ runs:
         if test "${CHECK_EXTERNAL}" = "true"; then INTERNAL= ; else INTERNAL="--internal"; fi ; \
         if test "${CHECK_EXTERNAL_STRICT}" = "true"; then TODOS= ; else TODOS="true"; fi ; \
         echo "::group::not ok links"; \
-        echo "${SKIP_CHECK_PATTERNS}"; \
+        SKIPS=""; \
+        for "$SKIP" in ${SKIP_CHECK_PATTERNS}; do SKIPS="${SKIP} --skip \"${SKIP}\""; done ; \
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
         --canonicalroot ${CANONICAL_ROOT} \
         ${INTERNAL} \
-        --skip "${SKIP_CHECK_PATTERNS}" \
+        ${SKIPS} \
         ${TODOS:+--todo "301 http" --todo "fragment-redirect"} \
         -r -p ${OUTPUT_DIRECTORY}/sitemap.xml | tee full-output | tee ok-links | tee todo-links | { grep -Ev "(^\#|^ *ok |^1\.\.|^TAP version|^\s*$)" || true; } | tee error.log ; \
         echo "::endgroup::not ok links"; \
