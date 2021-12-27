@@ -79,7 +79,7 @@ runs:
         if test "${CHECK_EXTERNAL_STRICT}" = "true"; then TODOS= ; else TODOS="true"; fi ; \
         echo "::group::not ok links"; \
         SKIPS=""; \
-        for skip in ${SKIP_CHECK_PATTERNS}; do SKIPS="${skip} --skip \"${skip}\""; done ; \
+        for skip in ${SKIP_CHECK_PATTERNS}; do SKIPS="${SKIPS}${SKIPS:+ }--skip \"${skip}\""; done ; \
         npx hyperlink ${OUTPUT_DIRECTORY}/sitemap.xml \
         --canonicalroot ${CANONICAL_ROOT} \
         ${INTERNAL} \
